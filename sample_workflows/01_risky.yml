@@ -1,0 +1,23 @@
+# Sample only. A risky workflow.
+name: risky
+on:
+  pull_request_target:
+  issue_comment:
+    types: [created]
+permissions: write-all
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@main
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: some-org/deploy-action@v2
+      - name: Greet
+        run: echo "Comment was ${{ github.event.comment.body }}"
+      - name: Install tool
+        run: |
+          curl -fsSL https://example.test/install.sh | bash
+          echo "Token is ${{ secrets.DEPLOY_TOKEN }}"
+      - name: Manual input
+        run: ./deploy.sh ${{ github.event.inputs.target }}
