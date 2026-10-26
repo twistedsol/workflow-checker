@@ -62,7 +62,13 @@ python -m unittest -v
 
 I used AI to help write the code and tests, then ran everything myself, read each rule and checked the sample results by hand. The rules follow public GitHub Actions security advice.
 
-## Limits
+## What I learned
+
+- The dangerous part of a workflow is often a single line: pasting text from an issue, comment or branch name into a shell command lets someone else run commands. Passing it through `env:` instead is the fix.
+- A `run: |` block holds many lines of shell code, so the tool has to work out where the block starts and ends by looking at the indentation. Reading real YAML would be safer, and that is a limit I wrote down.
+- I made the workflow check its own file. If the tool ever flagged a high problem in its own repo, the build would turn red.
+-
+- ## Limits
 
 - It reads lines, not real YAML. Unusual layouts, anchors or very odd formatting can be missed or misread.
 - It only looks at `run:` text for injection. Other places that run code, such as `actions/github-script`, are not checked.
