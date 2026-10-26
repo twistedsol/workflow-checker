@@ -1,0 +1,22 @@
+# Sample only. A hardened workflow. The SHA below is a placeholder, not a real release.
+name: hardened
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@0123456789abcdef0123456789abcdef01234567
+        with:
+          persist-credentials: false
+      - name: Show the title safely
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: echo "Title is $TITLE"
+      - name: Run unit tests
+        run: python -m unittest -v
